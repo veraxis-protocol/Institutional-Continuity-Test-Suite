@@ -1,0 +1,109 @@
+name: test
+
+# The core conformance gate must never depend on an optional harness, a network
+# install, or a third-party package. It is bare Python over frozen inputs.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  conformance:
+    name: conformance (python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Show environment
+        run: |
+          python --version
+          python -c "import sys; print(sys.implementation.name)"
+
+      # Fails on manifest/input integrity failure, provenance failure, mapper
+      # conformance failure, or any fixture/result mismatch. This verifies all 42
+      # frozen manifest hashes and then runs the unmodified frozen run_suite.py
+      # inside a reconstituted frozen package.
+      - name: Frozen package integrity and conformance suite
+        run: python scripts/verify_frozen_package.py
+
+      # Fails on any adversarial regression failure.
+      - name: Adversarial regression suite
+        run: python reference/bare_python/run_adversarial_regression.py
+
+      - name: Assert no generated evidence was committed
+        run: |
+          if git ls-files --error-unmatch evidence/run_result.json >/dev/null 2>&1; then
+            echo "::error::Generated run evidence must not be committed"
+            exit 1
+          fi
+          echo "OK: no generated run evidence committed"
+
+      - name: Assert no bytecode or cache artifacts were committed
+        run: |
+          found=$(git ls-files | grep -E '(^|/)__pycache__/|\.py[co]$' || true)
+          if [ -n "$found" ]; then
+            echo "::error::Bytecode or cache artifacts are committed:"
+            echo "$found"
+            exit 1
+          fi
+          echo "OK: no bytecode or cache artifacts committed"
+
+  # H1 is under development and is deliberately NON-BLOCKING. An unavailable or
+  # broken optional harness must never make the core conformance suite unusable.
+  #
+  # This job reports H1 status. It does NOT establish the H1 gate: that requires
+  # the committed, unmodified H1 package to execute under its own pin and produce
+  # equivalent normative terminal results against the frozen vector.
+  # See reference/inspect_ai/README.md.
+  h1-inspect:
+    name: H1 inspect harness (non-blocking, informational)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: conformance
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned Inspect AI
+        run: python -m pip install -r reference/inspect_ai/requirements.txt
+
+      - name: Report pin
+        run: |
+          python - <<'PY'
+          import importlib.metadata, json, pathlib
+          pin = json.loads(pathlib.Path("reference/inspect_ai/INSPECT_PIN.json").read_text())
+          installed = importlib.metadata.version("inspect-ai")
+          print(f"pinned:    {pin['package']}=={pin['version']}")
+          print(f"installed: inspect-ai=={installed}")
+          if installed != pin["version"]:
+              raise SystemExit(f"pin mismatch: expected {pin['version']}, got {installed}")
+          PY
+
+      - name: Attempt H1
+        run: |
+          echo "H1 EXECUTION PENDING - see reference/inspect_ai/README.md"
+          echo "Known blockers: run_h1.py requires the frozen v0.1.2 ZIP beside it,"
+          echo "and inspect_harness.py does not load under its own pin."
+          python reference/inspect_ai/run_h1.py || {
+            echo "::warning::H1 did not complete. H1 remains NOT ESTABLISHED."
+            exit 1
+          }
