@@ -1,0 +1,27 @@
+{
+  "artifact_id": "SYNTH-TOPOLOGY-3DOMAIN-001",
+  "causal_model": "explicit_event_parent_links",
+  "deployment_id": "SYNTH-DEPLOYMENT-3DOMAIN-001",
+  "domains": [
+    {
+      "administration": "independent",
+      "domain_id": "DOMAIN_A"
+    },
+    {
+      "administration": "independent",
+      "domain_id": "DOMAIN_B"
+    },
+    {
+      "administration": "independent",
+      "domain_id": "DOMAIN_C"
+    }
+  ],
+  "relationship": {
+    "acting_system": "DOMAIN_B",
+    "cross_domain": true,
+    "evidence_origin": "DOMAIN_A",
+    "external_evidence_relationship": true
+  },
+  "version": "0.1.2",
+  "wall_clock_required_for_normative_adjudication": false
+}

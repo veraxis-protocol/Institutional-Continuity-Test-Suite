@@ -1,0 +1,79 @@
+{
+  "fixture_id": "NOT_APPLICABLE_SINGLE_DOMAIN_001",
+  "observations": [
+    {
+      "event_id": {
+        "source_field": "event_id",
+        "source_observation_id": "E1",
+        "transform": "DIRECT",
+        "value": "E1"
+      },
+      "fields": {
+        "evidence_id": {
+          "source_field": "evidence_id",
+          "source_observation_id": "E1",
+          "transform": "DIRECT",
+          "value": "LOCAL-1"
+        },
+        "source_domain": {
+          "source_field": "source_domain",
+          "source_observation_id": "E1",
+          "transform": "DIRECT",
+          "value": "DOMAIN_B"
+        },
+        "target_domain": {
+          "source_field": "target_domain",
+          "source_observation_id": "E1",
+          "transform": "DIRECT",
+          "value": "DOMAIN_B"
+        }
+      },
+      "type": {
+        "source_field": "type",
+        "source_observation_id": "E1",
+        "transform": "DIRECT",
+        "value": "local_evidence"
+      }
+    },
+    {
+      "event_id": {
+        "source_field": "event_id",
+        "source_observation_id": "E2",
+        "transform": "DIRECT",
+        "value": "E2"
+      },
+      "fields": {
+        "acting_domain": {
+          "source_field": "acting_domain",
+          "source_observation_id": "E2",
+          "transform": "DIRECT",
+          "value": "DOMAIN_B"
+        },
+        "decision": {
+          "source_field": "decision",
+          "source_observation_id": "E2",
+          "transform": "DIRECT",
+          "value": "PERMIT"
+        },
+        "parent_event_id": {
+          "source_field": "parent_event_id",
+          "source_observation_id": "E2",
+          "transform": "DIRECT",
+          "value": null
+        },
+        "used_evidence_id": {
+          "source_field": "used_evidence_id",
+          "source_observation_id": "E2",
+          "transform": "DIRECT",
+          "value": "LOCAL-1"
+        }
+      },
+      "type": {
+        "source_field": "type",
+        "source_observation_id": "E2",
+        "transform": "DIRECT",
+        "value": "action"
+      }
+    }
+  ]
+}

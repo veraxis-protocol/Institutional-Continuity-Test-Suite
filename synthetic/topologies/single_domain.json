@@ -1,0 +1,19 @@
+{
+  "artifact_id": "SYNTH-TOPOLOGY-1DOMAIN-001",
+  "causal_model": "explicit_event_parent_links",
+  "deployment_id": "SYNTH-DEPLOYMENT-1DOMAIN-001",
+  "domains": [
+    {
+      "administration": "independent",
+      "domain_id": "DOMAIN_B"
+    }
+  ],
+  "relationship": {
+    "acting_system": "DOMAIN_B",
+    "cross_domain": false,
+    "evidence_origin": null,
+    "external_evidence_relationship": false
+  },
+  "version": "0.1.2",
+  "wall_clock_required_for_normative_adjudication": false
+}

@@ -1,0 +1,89 @@
+{
+  "cases": [
+    {
+      "case_id": "C01",
+      "expected": "PASS",
+      "fixture": "valid_permit_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C02",
+      "expected": "NOT_TESTABLE",
+      "fixture": "not_testable_missing_condition_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C03",
+      "expected": "FAIL",
+      "fixture": "fail_source_self_certifies_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C04",
+      "expected": "NOT_TESTABLE",
+      "fixture": "not_testable_missing_correlation_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C05",
+      "expected": "FAIL",
+      "fixture": "fail_observed_false_condition_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C06",
+      "expected": "PASS",
+      "fixture": "valid_deny_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C07",
+      "expected": "NOT_TESTABLE",
+      "fixture": "not_testable_unknown_decision_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C08",
+      "expected": "NOT_TESTABLE",
+      "fixture": "not_testable_missing_decision_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C09",
+      "expected": "NOT_TESTABLE",
+      "fixture": "not_testable_missing_external_event_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C10",
+      "expected": "INVALID_TEST_EXECUTION",
+      "fixture": "invalid_duplicate_evaluation_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C11",
+      "expected": "PASS",
+      "fixture": "valid_order_shuffled_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C12",
+      "expected": "PASS",
+      "fixture": "valid_third_party_establishment_001.json",
+      "topology": "three_domain.json"
+    },
+    {
+      "case_id": "C13",
+      "expected": "INVALID_TEST_EXECUTION",
+      "fixture": "invalid_missing_event_id_001.json",
+      "topology": "two_domain.json"
+    },
+    {
+      "case_id": "C14",
+      "expected": "NOT_APPLICABLE_TOPOLOGY",
+      "fixture": "not_applicable_single_domain_001.json",
+      "topology": "single_domain.json"
+    }
+  ],
+  "version": "0.1.2"
+}

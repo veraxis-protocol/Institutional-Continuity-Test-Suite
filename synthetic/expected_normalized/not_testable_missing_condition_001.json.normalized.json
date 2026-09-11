@@ -1,0 +1,191 @@
+{
+  "fixture_id": "NOT_TESTABLE_MISSING_CONDITION_001",
+  "observations": [
+    {
+      "event_id": {
+        "source_field": "event_id",
+        "source_observation_id": "E1",
+        "transform": "DIRECT",
+        "value": "E1"
+      },
+      "fields": {
+        "claim": {
+          "source_field": "claim",
+          "source_observation_id": "E1",
+          "transform": "DIRECT",
+          "value": "counterparty_status=eligible"
+        },
+        "evidence_id": {
+          "source_field": "evidence_id",
+          "source_observation_id": "E1",
+          "transform": "DIRECT",
+          "value": "EXT-123"
+        },
+        "source_domain": {
+          "source_field": "source_domain",
+          "source_observation_id": "E1",
+          "transform": "DIRECT",
+          "value": "DOMAIN_A"
+        },
+        "target_domain": {
+          "source_field": "target_domain",
+          "source_observation_id": "E1",
+          "transform": "DIRECT",
+          "value": "DOMAIN_B"
+        }
+      },
+      "type": {
+        "source_field": "type",
+        "source_observation_id": "E1",
+        "transform": "DIRECT",
+        "value": "external_evidence"
+      }
+    },
+    {
+      "event_id": {
+        "source_field": "event_id",
+        "source_observation_id": "E2",
+        "transform": "DIRECT",
+        "value": "E2"
+      },
+      "fields": {
+        "acting_domain": {
+          "source_field": "acting_domain",
+          "source_observation_id": "E2",
+          "transform": "DIRECT",
+          "value": "DOMAIN_B"
+        },
+        "policy_id": {
+          "source_field": "policy_id",
+          "source_observation_id": "E2",
+          "transform": "DIRECT",
+          "value": "POL-B-7"
+        },
+        "required_conditions": [
+          {
+            "source_field": "required_conditions[0]",
+            "source_observation_id": "E2",
+            "transform": "DIRECT",
+            "value": "signature_valid"
+          },
+          {
+            "source_field": "required_conditions[1]",
+            "source_observation_id": "E2",
+            "transform": "DIRECT",
+            "value": "issuer_allowed"
+          },
+          {
+            "source_field": "required_conditions[2]",
+            "source_observation_id": "E2",
+            "transform": "DIRECT",
+            "value": "freshness_valid"
+          }
+        ]
+      },
+      "type": {
+        "source_field": "type",
+        "source_observation_id": "E2",
+        "transform": "DIRECT",
+        "value": "acceptance_policy"
+      }
+    },
+    {
+      "event_id": {
+        "source_field": "event_id",
+        "source_observation_id": "E3",
+        "transform": "DIRECT",
+        "value": "E3"
+      },
+      "fields": {
+        "acting_domain": {
+          "source_field": "acting_domain",
+          "source_observation_id": "E3",
+          "transform": "DIRECT",
+          "value": "DOMAIN_B"
+        },
+        "condition_results": {
+          "issuer_allowed": {
+            "established_by_domain": {
+              "source_field": "condition_results.issuer_allowed.established_by_domain",
+              "source_observation_id": "E3",
+              "transform": "DIRECT",
+              "value": "DOMAIN_B"
+            },
+            "value": {
+              "source_field": "condition_results.issuer_allowed.value",
+              "source_observation_id": "E3",
+              "transform": "DIRECT",
+              "value": true
+            }
+          },
+          "signature_valid": {
+            "established_by_domain": {
+              "source_field": "condition_results.signature_valid.established_by_domain",
+              "source_observation_id": "E3",
+              "transform": "DIRECT",
+              "value": "DOMAIN_B"
+            },
+            "value": {
+              "source_field": "condition_results.signature_valid.value",
+              "source_observation_id": "E3",
+              "transform": "DIRECT",
+              "value": true
+            }
+          }
+        },
+        "evidence_id": {
+          "source_field": "evidence_id",
+          "source_observation_id": "E3",
+          "transform": "DIRECT",
+          "value": "EXT-123"
+        }
+      },
+      "type": {
+        "source_field": "type",
+        "source_observation_id": "E3",
+        "transform": "DIRECT",
+        "value": "acceptance_evaluation"
+      }
+    },
+    {
+      "event_id": {
+        "source_field": "event_id",
+        "source_observation_id": "E4",
+        "transform": "DIRECT",
+        "value": "E4"
+      },
+      "fields": {
+        "acting_domain": {
+          "source_field": "acting_domain",
+          "source_observation_id": "E4",
+          "transform": "DIRECT",
+          "value": "DOMAIN_B"
+        },
+        "decision": {
+          "source_field": "decision",
+          "source_observation_id": "E4",
+          "transform": "DIRECT",
+          "value": "PERMIT"
+        },
+        "parent_event_id": {
+          "source_field": "parent_event_id",
+          "source_observation_id": "E4",
+          "transform": "DIRECT",
+          "value": "E3"
+        },
+        "used_evidence_id": {
+          "source_field": "used_evidence_id",
+          "source_observation_id": "E4",
+          "transform": "DIRECT",
+          "value": "EXT-123"
+        }
+      },
+      "type": {
+        "source_field": "type",
+        "source_observation_id": "E4",
+        "transform": "DIRECT",
+        "value": "action"
+      }
+    }
+  ]
+}

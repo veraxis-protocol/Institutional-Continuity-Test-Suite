@@ -1,0 +1,52 @@
+{
+  "events": [
+    {
+      "claim": "counterparty_status=eligible",
+      "event_id": "E1",
+      "evidence_id": "EXT-123",
+      "source_domain": "DOMAIN_A",
+      "target_domain": "DOMAIN_B",
+      "type": "external_evidence"
+    },
+    {
+      "acting_domain": "DOMAIN_B",
+      "event_id": "E2",
+      "policy_id": "POL-B-7",
+      "required_conditions": [
+        "signature_valid",
+        "issuer_allowed",
+        "freshness_valid"
+      ],
+      "type": "acceptance_policy"
+    },
+    {
+      "acting_domain": "DOMAIN_B",
+      "condition_results": {
+        "freshness_valid": {
+          "established_by_domain": "DOMAIN_B",
+          "value": true
+        },
+        "issuer_allowed": {
+          "established_by_domain": "DOMAIN_B",
+          "value": true
+        },
+        "signature_valid": {
+          "established_by_domain": "DOMAIN_B",
+          "value": true
+        }
+      },
+      "event_id": "E3",
+      "evidence_id": "EXT-123",
+      "type": "acceptance_evaluation"
+    },
+    {
+      "acting_domain": "DOMAIN_B",
+      "decision": "PERMIT",
+      "event_id": "E4",
+      "parent_event_id": "E3",
+      "type": "action",
+      "used_evidence_id": null
+    }
+  ],
+  "fixture_id": "NOT_TESTABLE_MISSING_CORRELATION_001"
+}

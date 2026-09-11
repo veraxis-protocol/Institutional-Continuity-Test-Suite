@@ -1,0 +1,176 @@
+{
+  "artifact": "ICTS-C18-SYNTHETIC-FIRST-v0.1.2",
+  "files": {
+    "CHANGELOG_v0.1.2.md": {
+      "bytes": 1657,
+      "sha256": "53a17d4d7a4a7f86ceebed3a74f0125b34b3c7200bacee8c3b65ec48ba0924a3"
+    },
+    "README.md": {
+      "bytes": 1529,
+      "sha256": "1c74d77b0371597e16512e344700e5e5a4a2ecd161be9b1db5fb9fc0cfc172d6"
+    },
+    "governance/EXTERNAL_CHANGE_PROCESS.md": {
+      "bytes": 797,
+      "sha256": "2dc685394998b014c60f4871d72a3c14d2e9921e2bdcc26b8b3bc04f4382b35f"
+    },
+    "reference/bare_python/icts_core.py": {
+      "bytes": 18987,
+      "sha256": "891bff746868ce5d00a53e05ceb9e3a42d7c7fde4704dee338a9d0ef078683c8"
+    },
+    "reference/bare_python/run_adversarial_regression.py": {
+      "bytes": 4722,
+      "sha256": "903f731d35cdd920d6143ff3742214d70da9353ac84b61a21327fa953865e8e7"
+    },
+    "reference/bare_python/run_suite.py": {
+      "bytes": 5378,
+      "sha256": "5080cafbb9085b65e4e2b3b6afdda910a0fa275a2499b775c8fb34223169178e"
+    },
+    "spec/core/CORE-PROP-EXT-EVIDENCE-001.md": {
+      "bytes": 1119,
+      "sha256": "93754c5d822e87ae61266f4ef9587e8869a1596053f983bc290433e0b6be7807"
+    },
+    "spec/icts/ESC-EXT-EVIDENCE-001.json": {
+      "bytes": 1932,
+      "sha256": "fd6e0b6d20ef0b2de9529e0149d6e0b7aec77dcdce8807787c84a1daf6d675ed"
+    },
+    "spec/icts/ICTS-VEC-EXT-EVIDENCE-001.json": {
+      "bytes": 1387,
+      "sha256": "b63f641be82b3c9d3a4d41fae83b8f7a069a2c3b3b51eb157d42be90e4236384"
+    },
+    "spec/icts/NPC-EXT-EVIDENCE-001.json": {
+      "bytes": 1872,
+      "sha256": "e879c2d6214daa35a2425b4d3c833c323bca777ebd808995fbca9b2af0f93abd"
+    },
+    "spec/icts/RESULT_VOCABULARY.md": {
+      "bytes": 760,
+      "sha256": "b0d62fae763cef3a16d0e7284b87294a290eeab2f85a315f89925eddc6cca2ac"
+    },
+    "synthetic/cases.json": {
+      "bytes": 2311,
+      "sha256": "ec35f6cc924339a3260d1daf2d42d0286e8cfc6ae0cb7f2cde4e17e0e7a2235a"
+    },
+    "synthetic/expected_normalized/fail_observed_false_condition_001.json.normalized.json": {
+      "bytes": 5943,
+      "sha256": "373bd0ca5f5aff64534ffb4f64d3ecf289bbea0f14ec79827715d87fee853613"
+    },
+    "synthetic/expected_normalized/fail_source_self_certifies_001.json.normalized.json": {
+      "bytes": 5939,
+      "sha256": "2be03013dcfb0fb6feb978be0cd4aaeb5914226456f253de1a21eaed7f06efe2"
+    },
+    "synthetic/expected_normalized/invalid_duplicate_evaluation_001.json.normalized.json": {
+      "bytes": 8288,
+      "sha256": "00a18d66ebf034bb3caf45102c3ef3269253a0fd60eaa2e8505117a1bf5fe821"
+    },
+    "synthetic/expected_normalized/not_applicable_single_domain_001.json.normalized.json": {
+      "bytes": 2064,
+      "sha256": "6d098ba03c1bf74107625e9bcd2af8debe36b85c50405cc2ffee11f85fc76c9f"
+    },
+    "synthetic/expected_normalized/not_testable_missing_condition_001.json.normalized.json": {
+      "bytes": 5420,
+      "sha256": "aaf287cae5fce2daccc0d76a8c814b567d1075d3e4d72483e8dcc1408c127ed7"
+    },
+    "synthetic/expected_normalized/not_testable_missing_correlation_001.json.normalized.json": {
+      "bytes": 5940,
+      "sha256": "d2bc079c83ccaa17ede91e8a1134aefffa1c7e45cfc489517d5295ba82697713"
+    },
+    "synthetic/expected_normalized/not_testable_missing_decision_001.json.normalized.json": {
+      "bytes": 5769,
+      "sha256": "818a4d7cac1ee32c8ab66df53b05a6e123494d83b4b6566f84b7e42d409f2d4a"
+    },
+    "synthetic/expected_normalized/not_testable_missing_external_event_001.json.normalized.json": {
+      "bytes": 4850,
+      "sha256": "a084c824c163a61b76d145e4e7112ffdd76dd6327436b82fb087da5a63c28ac3"
+    },
+    "synthetic/expected_normalized/not_testable_unknown_decision_001.json.normalized.json": {
+      "bytes": 5946,
+      "sha256": "da0bd0d3eb71e6e9a2ce1568193935de1838fc245de9abdf170e395641cda131"
+    },
+    "synthetic/expected_normalized/valid_deny_001.json.normalized.json": {
+      "bytes": 5922,
+      "sha256": "0e643c385d0a47eb747b12b0ca377f30c037ac0e33deb48f69ed607394d2f78d"
+    },
+    "synthetic/expected_normalized/valid_order_shuffled_001.json.normalized.json": {
+      "bytes": 5933,
+      "sha256": "e6de2acb2387652a21881b55ed37c4b6d34e7d73036c208e627acf599ad794a6"
+    },
+    "synthetic/expected_normalized/valid_permit_001.json.normalized.json": {
+      "bytes": 5925,
+      "sha256": "c710e956f0d869148823ab4d46ea7da27fad09b7f39ae14027f7eeba65ff2197"
+    },
+    "synthetic/expected_normalized/valid_third_party_establishment_001.json.normalized.json": {
+      "bytes": 5944,
+      "sha256": "178519a694ef884455ed5866f89c9a5ceb560f44c776bbaa8745a5212e3b21da"
+    },
+    "synthetic/fixtures/fail_observed_false_condition_001.json": {
+      "bytes": 1252,
+      "sha256": "86fe5f31e65cbbd2580f5b0f5cba4b6f7ae1b3f783764d483360fe82eee67586"
+    },
+    "synthetic/fixtures/fail_source_self_certifies_001.json": {
+      "bytes": 1248,
+      "sha256": "8c3e2112f3ca990270056001977895ad65a053211e38e69fb4b6da47322bdfe2"
+    },
+    "synthetic/fixtures/invalid_duplicate_evaluation_001.json": {
+      "bytes": 1763,
+      "sha256": "6b0997b6d55149ffc2ddeff4b55d41981f673058fe49f64b4dae54d2f0fa79a3"
+    },
+    "synthetic/fixtures/invalid_missing_event_id_001.json": {
+      "bytes": 1222,
+      "sha256": "9a4e239283ca782e42767f419e3b61ef88b68ec35c2ec4c76388dbc7f2393891"
+    },
+    "synthetic/fixtures/not_applicable_single_domain_001.json": {
+      "bytes": 434,
+      "sha256": "31d00f0290dcad2bbe357312c725b22ebfed8094ee99bbcf1bb0f75ceab4aa11"
+    },
+    "synthetic/fixtures/not_testable_missing_condition_001.json": {
+      "bytes": 1141,
+      "sha256": "93546655b9a78e8df7cc913c04f3327e48a55ead58f032d827f49db8e2b5d119"
+    },
+    "synthetic/fixtures/not_testable_missing_correlation_001.json": {
+      "bytes": 1249,
+      "sha256": "67dd4a140f79a429ad1a65c6f6ed600dee0248b686878220d5d9b68733aea367"
+    },
+    "synthetic/fixtures/not_testable_missing_decision_001.json": {
+      "bytes": 1223,
+      "sha256": "a286c154d4030f85b4cd5fe902650bb991560026057bf18b829777c6834d314c"
+    },
+    "synthetic/fixtures/not_testable_missing_external_event_001.json": {
+      "bytes": 1037,
+      "sha256": "9d4e838ef35ec928092987b3689392491f833fc062289fed4fa5609357d74d9e"
+    },
+    "synthetic/fixtures/not_testable_unknown_decision_001.json": {
+      "bytes": 1255,
+      "sha256": "92fcecc0eb1667fa3fa25b85b212d208ebed45c8a8ea60ad3528ccc82ffa6e23"
+    },
+    "synthetic/fixtures/valid_deny_001.json": {
+      "bytes": 1231,
+      "sha256": "8f00f313dcafb5cafb1bdba8ecd90f6304780eaf26e183be9e3d65097eef0b9c"
+    },
+    "synthetic/fixtures/valid_order_shuffled_001.json": {
+      "bytes": 1242,
+      "sha256": "3a3cc5171ab0908a8efdb3c2c559cd44caf4ae6391c5949d7395a3a3ef3ea15e"
+    },
+    "synthetic/fixtures/valid_permit_001.json": {
+      "bytes": 1234,
+      "sha256": "8cd75d33b52360f31291ee8c81b4ba53e912f35a873ae2c66195f698f5a82ee9"
+    },
+    "synthetic/fixtures/valid_third_party_establishment_001.json": {
+      "bytes": 1253,
+      "sha256": "797b31ee65553025dd7816dd21af022daaba1f2f1e5f48b1c95be4bb81a48c8b"
+    },
+    "synthetic/topologies/single_domain.json": {
+      "bytes": 490,
+      "sha256": "2878ce5029ed74417191189c098bb6018b870c66de98b96e182474f4ebad1d10"
+    },
+    "synthetic/topologies/three_domain.json": {
+      "bytes": 658,
+      "sha256": "32030ede2f78bfa6968de926465aedc0fa2a8cb60055b6bc76324d5582dcb48a"
+    },
+    "synthetic/topologies/two_domain.json": {
+      "bytes": 576,
+      "sha256": "a7fce583286b6b422b9d5863df72b0a1b1dba3ba0872027c4e28173c3537f474"
+    }
+  },
+  "generated_at_utc": "2026-09-11T03:45:36.426845+00:00",
+  "hash_algorithm": "SHA-256",
+  "version": "0.1.2"
+}

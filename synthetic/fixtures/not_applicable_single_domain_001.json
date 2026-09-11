@@ -1,0 +1,20 @@
+{
+  "events": [
+    {
+      "event_id": "E1",
+      "evidence_id": "LOCAL-1",
+      "source_domain": "DOMAIN_B",
+      "target_domain": "DOMAIN_B",
+      "type": "local_evidence"
+    },
+    {
+      "acting_domain": "DOMAIN_B",
+      "decision": "PERMIT",
+      "event_id": "E2",
+      "parent_event_id": null,
+      "type": "action",
+      "used_evidence_id": "LOCAL-1"
+    }
+  ],
+  "fixture_id": "NOT_APPLICABLE_SINGLE_DOMAIN_001"
+}
