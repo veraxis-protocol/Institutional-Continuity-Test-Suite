@@ -151,13 +151,17 @@ This repository is deliberately explicit about what it has and has not establish
 - Topology ineligibility is distinct from observability failure.
 - Deterministic synthetic cases execute.
 - The adversarial regression suite passes locally.
+- **`H1 PASS — EXT-EVIDENCE-001`**: the frozen vector produced identical
+  normative terminal results across the bare-Python and Inspect AI reference
+  implementations (14/14 frozen cases). One vector, two implementations — see
+  [`reference/inspect_ai/H1_RESULT.json`](reference/inspect_ai/H1_RESULT.json).
 - `FIELD_EPSR_PENDING`.
 - Synthetic case ratios are not field EPSR.
 
 **Not established**
 
 - Blind independent review gate.
-- H1 harness independence — **`H1 EXECUTION PENDING`**.
+- Full ICTS harness independence. H1 covers one vector, not all properties.
 - H2.
 - Field usefulness.
 - Live bank deployment.
@@ -177,7 +181,7 @@ repository.
 | `spec/icts/` | Vectors, Evidence Sufficiency Contracts, Normalization Provenance Contracts, result vocabulary | **Normative** |
 | `synthetic/` | Frozen synthetic topologies, fixtures, and expected-normalized oracles | **Normative inputs** |
 | `reference/bare_python/` | Reference implementation of v0.1.2 | Non-normative, replaceable |
-| `reference/inspect_ai/` | Second harness (H1) under development | Non-normative, replaceable |
+| `reference/inspect_ai/` | Second harness (H1) — `H1 PASS — EXT-EVIDENCE-001` | Non-normative, replaceable |
 | `governance/` | External change process and review policy | Process |
 | `review/` | Blind review protocol | Process |
 | `provenance/` | Release state and frozen manifest | Provenance |

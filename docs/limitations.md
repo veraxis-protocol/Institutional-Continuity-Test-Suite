@@ -14,21 +14,30 @@ Exactly one neutral property and one vector are implemented:
 speaks only to external-evidence acceptance. It says nothing about any other institutional
 property.
 
-## 2. H1 is not established
+## 2. H1 is established for one vector only
 
 ```
-H1 EXECUTION PENDING
+H1 PASS — EXT-EVIDENCE-001
 ```
 
-H1 — harness independence — requires the same frozen vector to produce equivalent normative
-terminal results in two independent harness implementations, executed and compared.
+H1 — harness independence — has been executed and passed. The frozen vector produced identical
+normative terminal results across the bare-Python and Inspect AI reference implementations on
+all 14 frozen cases. Independence is checked mechanically on every run: the Inspect harness
+imports no bare-Python module and implements its own normalization, evidence-sufficiency, and
+invariant-adjudication path. Evidence:
+[`../reference/inspect_ai/H1_RESULT.json`](../reference/inspect_ai/H1_RESULT.json).
 
-The Inspect AI second harness is present in `reference/inspect_ai/` but has **not** been
-executed as shipped. It does not currently load under its own pin, and its runner requires the
-frozen ZIP. See [`../reference/inspect_ai/README.md`](../reference/inspect_ai/README.md).
+The bounded claim is **one vector, two implementations**. H1 does **not** establish full ICTS
+harness independence, all properties, H2, field validity, field EPSR, vendor conformance, or
+deployment certification.
 
-Even when H1 passes, it will establish only harness equivalence for one frozen vector. It will
-not establish H2, field validity, field EPSR, or all-suite conformance.
+What H1 does buy is narrow but real: it separates a property that belongs to the
+**specification** from one that is an artifact of a single harness. A result that only one
+implementation can reproduce is not a specification.
+
+Note also that `ICTS_H1_INSPECT_v0.1.0` did not execute against its own Inspect pin, and that
+this went unnoticed while the H1 CI job was advisory. The job is now a required-success gate.
+See [`../reference/inspect_ai/CHANGELOG.md`](../reference/inspect_ai/CHANGELOG.md).
 
 ## 3. H2 is not established
 
@@ -137,7 +146,8 @@ See [`../provenance/RELEASE_STATE.md`](../provenance/RELEASE_STATE.md).
 | Deterministic synthetic cases execute | Established |
 | Adversarial regression passes locally | Established |
 | Blind independent review gate | **Not established** |
-| H1 harness independence | **Not established** |
+| H1 harness independence, `EXT-EVIDENCE-001` | Established (one vector, two implementations) |
+| Full ICTS harness independence, all properties | **Not established** |
 | H2 | **Not established** |
 | Field usefulness | **Not established** |
 | Live bank deployment | **Not established** |

@@ -387,7 +387,12 @@ def no_model_solver() -> Solver:
         return state
     return solve
 
-@scorer
+# `metrics` is a required argument of @scorer in inspect-ai 0.3.263. v0.1.0 used a
+# bare `@scorer`, which passed this function as `metrics` and left `scorer_type`
+# unbound, raising TypeError at import. An empty sequence is the API-correct
+# minimum: ICTS terminal results are categorical, not correct/incorrect, so no
+# aggregate metric is meaningful here. H1 compares terminal results case by case.
+@scorer(metrics=[])
 def icts_c18_scorer():
     async def score(state: TaskState, target: Target) -> Score:
         payload = json.loads(state.input_text)

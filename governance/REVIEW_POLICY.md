@@ -91,6 +91,6 @@ Review findings follow the same lifecycle and the same commitments as any extern
 | Gate | Status |
 | --- | --- |
 | Blind independent review of v0.1.2 | Open |
-| H1 harness independence | Open — `H1 EXECUTION PENDING` |
+| H1 harness independence | **Closed for `EXT-EVIDENCE-001`** — `H1_PASS`, 14/14 cases |
 | H2 | Not started |
 | Field EPSR | `FIELD_EPSR_PENDING` |

@@ -13,7 +13,7 @@ is.
 | Manifest generated at | `2026-09-11T03:45:36.426845+00:00` |
 | Hash algorithm | SHA-256 |
 | Manifest entries | 42 |
-| Second harness package | `ICTS_H1_INSPECT_v0.1.0` |
+| Second harness package | `ICTS_H1_INSPECT_v0.1.1` (v0.1.0 preserved in history) |
 
 ## Digests
 
@@ -81,8 +81,14 @@ All 42 manifest-listed files, at their original manifest paths:
 - `CHANGELOG_v0.1.2.md`
 - `MANIFEST.json`
 
-The `ICTS_H1_INSPECT_v0.1.0` files in `reference/inspect_ai/` are likewise carried
-byte-for-byte and verified against that package's own manifest.
+`reference/inspect_ai/` originally carried the `ICTS_H1_INSPECT_v0.1.0` files byte-for-byte,
+verified against that package's own manifest. That harness did not execute against its own
+Inspect pin, and `reference/inspect_ai/` now carries **`ICTS_H1_INSPECT_v0.1.1`**, which
+repairs the defect. v0.1.0 remains preserved in git history and its defect is recorded in
+[`../reference/inspect_ai/CHANGELOG.md`](../reference/inspect_ai/CHANGELOG.md).
+
+The second harness is non-normative and versioned independently of ICTS. No v0.1.2 normative
+artifact changed.
 
 ### The one documented port deviation
 
@@ -137,6 +143,18 @@ Expected frozen suite output: terminal `PASS`, 14 cases, 0 failures,
 
 Expected adversarial output: terminal `PASS`, 15 checks.
 
+The H1 harness-independence gate additionally reproduces as:
+
+```bash
+python -m pip install -r reference/inspect_ai/requirements.txt
+python reference/inspect_ai/run_h1.py --frozen-tree .
+```
+
+Expected: terminal `H1_PASS`, 14 cases, 14 equivalent, and
+`normative_comparison_sha256 = cf1a536def94b6ecc5ef1f9c4ee69eae5c1815918a207f73365977ad2d690643`.
+The normative portion of the H1 evidence carries no timestamps or environment data, so that
+digest is stable across machines; the evidence file as a whole is not byte-reproducible.
+
 ## Claim ceilings
 
 **Established**
@@ -149,13 +167,15 @@ Expected adversarial output: terminal `PASS`, 15 checks.
 - Topology ineligibility is distinct from observability failure.
 - Deterministic synthetic cases execute.
 - Adversarial regression suite passes locally.
+- `H1 PASS — EXT-EVIDENCE-001`: identical normative terminal results across the
+  bare-Python and Inspect AI implementations, 14/14 frozen cases.
 - `FIELD_EPSR_PENDING`.
 - Synthetic case ratios are not field EPSR.
 
 **Not established**
 
 - Blind independent review gate.
-- H1 harness independence — `H1 EXECUTION PENDING`.
+- Full ICTS harness independence (H1 covers one vector, not all properties).
 - H2.
 - Field usefulness.
 - Live bank deployment.

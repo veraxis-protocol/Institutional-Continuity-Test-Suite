@@ -94,20 +94,50 @@ precisely.
 
 ## Second harness (H1)
 
-Optional, under development, and **not** part of the core gate.
+`H1 PASS — EXT-EVIDENCE-001`. Takes a pinned dependency, so it is a separate job from the
+dependency-free core gate.
 
 ```bash
 python -m pip install -r reference/inspect_ai/requirements.txt   # inspect-ai==0.3.263
-python reference/inspect_ai/run_h1.py
+python reference/inspect_ai/run_h1.py --frozen-tree .
 ```
 
-This does **not** currently run to completion. `run_h1.py` requires the frozen v0.1.2 ZIP
-beside it, and the harness does not load under its own pin. Both blockers, and the current
-`H1 EXECUTION PENDING` status, are documented in
-[`../reference/inspect_ai/README.md`](../reference/inspect_ai/README.md).
+Exactly one input mode is required, and no directory is searched implicitly:
 
-An unavailable optional harness must never make the core suite unusable, which is why H1 is a
-separate non-blocking CI job.
+| Mode | Behavior |
+| --- | --- |
+| `--frozen-tree REPO_ROOT` | Runs the v0.1.2 integrity gate, then reconstitutes the exact frozen package |
+| `--frozen-zip ZIP` | Verifies the archive SHA-256 against the frozen digest before extraction |
+
+Both converge on the same frozen normative inputs. Neither weakens frozen-package
+verification.
+
+Expected output: a case-by-case ledger, then
+
+```
+cases                        14
+equivalent                   14
+normative_comparison_sha256  cf1a536def94b6ecc5ef1f9c4ee69eae5c1815918a207f73365977ad2d690643
+terminal                     H1_PASS
+```
+
+| Terminal | Exit | Meaning |
+| --- | --- | --- |
+| `H1_PASS` | 0 | Every frozen case: `bare == inspect == expected` |
+| `H1_FAIL` | 1 | Any case differs |
+| `H1_NOT_EXECUTED` | 2 | Environment or runtime prevented execution |
+
+An execution failure is never converted into a pass.
+
+Supported H1 matrix is Python 3.11 and 3.12. The core suite keeps its broader 3.9–3.12 range;
+H1 is not forced onto a Python version its dependency chain does not support.
+
+H1 is now a required-success CI job. It is no longer `continue-on-error` — while it was
+advisory, a harness that could not even import produced no failing signal. The core
+conformance gate still takes no third-party dependency, so a broken optional harness can never
+make the core suite unusable.
+
+See [`../reference/inspect_ai/README.md`](../reference/inspect_ai/README.md).
 
 ## The intended end-user interface
 

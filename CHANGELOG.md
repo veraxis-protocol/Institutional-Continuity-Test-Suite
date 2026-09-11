@@ -11,7 +11,23 @@ rewritten.
 
 ## Unreleased
 
-Nothing.
+### H1 harness independence established for EXT-EVIDENCE-001
+
+Second harness repaired and the H1 gate executed. See
+[`reference/inspect_ai/CHANGELOG.md`](reference/inspect_ai/CHANGELOG.md) for the harness
+changelog, including the preserved v0.1.0 defect.
+
+- `ICTS_H1_INSPECT_v0.1.1` repairs Inspect scorer API compatibility with
+  `inspect-ai==0.3.263` and replaces the fragile ZIP-location dependency with explicit
+  `--frozen-tree` / `--frozen-zip` input modes.
+- H1 executed: **`H1_PASS`**, 14/14 frozen cases equivalent across the bare-Python and
+  Inspect AI implementations.
+- Added committed evidence (`H1_RESULT.json`) and a mechanical independence record
+  (`H1_INDEPENDENCE_RECORD.json`).
+- H1 CI is now a required-success job on Python 3.11 and 3.12, no longer `continue-on-error`.
+
+No ICTS v0.1.2 normative artifact changed. The two Session 002 non-blocking patches remain
+deliberately unapplied.
 
 ## Repository bootstrap — v0.1.2 port
 

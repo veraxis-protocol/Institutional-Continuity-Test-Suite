@@ -1,116 +1,127 @@
 # Inspect AI second harness (H1)
 
-> ## `H1 NOT ESTABLISHED`
-> ## `H1 EXECUTION PENDING`
+> ## `H1 PASS — EXT-EVIDENCE-001`
+>
+> The frozen vector produced **identical normative terminal results** across the
+> bare-Python and Inspect AI reference implementations: **14/14 frozen cases**.
+>
+> Evidence: [`H1_RESULT.json`](H1_RESULT.json) ·
+> [`H1_INDEPENDENCE_RECORD.json`](H1_INDEPENDENCE_RECORD.json)
+> `normative_comparison_sha256 = cf1a536def94b6ecc5ef1f9c4ee69eae5c1815918a207f73365977ad2d690643`
 
-This directory contains the `ICTS_H1_INSPECT_v0.1.0` package, carried byte-for-byte. It is
-**work in progress**. Nothing in this repository claims H1 is passed.
+Current version: **`ICTS_H1_INSPECT_v0.1.1`** · pinned to `inspect-ai==0.3.263`.
+See [`CHANGELOG.md`](CHANGELOG.md).
 
-## What H1 is
+## What H1 establishes
 
 H1 is the **harness independence** gate. It asks one narrow question:
 
-> Does the same frozen vector produce equivalent normative terminal results in two
+> Does the same frozen vector produce identical normative terminal results in two
 > independent harness implementations?
 
-If and when H1 is executed and passes, that is *all* it establishes. H1 does **not**
-establish:
+The bounded claim now supported:
 
-- H2 cross-boundary independence for a harder vector;
-- field usefulness;
-- field EPSR;
-- topology corroboration in a live deployment;
-- the blind independent review gate for v0.1.2;
-- all-suite conformance.
+> **H1 established for `ICTS-VEC-EXT-EVIDENCE-001`:** the frozen vector produced
+> identical normative terminal results across the bare-Python and Inspect AI
+> reference implementations.
+
+That is one vector, two implementations. It is what separates a property that
+belongs to the **specification** from one that is an artifact of a single
+harness.
+
+## What H1 does not establish
+
+H1 does **not** establish:
+
+- full ICTS harness independence;
+- all properties;
+- H2 (cross-boundary independence for a harder vector);
+- field usefulness or field validity;
+- field EPSR — still `FIELD_EPSR_PENDING`;
+- vendor conformance;
+- deployment certification;
+- the blind independent review gate, which remains **owed**.
 
 ## Independence boundary
 
-`inspect_harness.py` does **not** import `reference/bare_python/icts_core.py`. It
-independently implements the same frozen property, NPC/ESC semantics, topology binding, result
-vocabulary, and case set through Inspect's Task/Solver/Scorer path, with its own `normalize`
-and `adjudicate`.
+H1 is meaningless if the second harness calls the first. Independence is checked
+**mechanically on every run**, not asserted:
 
-That structural independence has been confirmed by inspection. It is a precondition for H1
-meaning anything: a second harness that called into the first would prove nothing.
+| Check | Method | Result |
+| --- | --- | --- |
+| No bare-Python import | Static AST of `inspect_harness.py` | imports only `__future__`, `json`, `typing`, `inspect_ai*` |
+| No indirect route | Textual scan for `icts_core` / `bare_python` | none found |
+| No runtime leak | `sys.modules` after import | no bare-Python module loaded |
+| Own normative path | Module ownership of `normalize`, `evidence_sufficient`, `invariant_holds`, `adjudicate` | all resolve to `inspect_harness` |
+
+Both harnesses consume the same frozen normative **inputs** — property, ESC, NPC,
+topology declarations, fixtures, case set — which is exactly what H1 requires.
+They implement the normative evaluation path independently.
+
+`run_h1.py` runs the bare-Python suite as a separate **subprocess** to obtain the
+comparison baseline. The Inspect harness itself never imports or invokes it.
 
 ## Files
 
 | File | Role |
 | --- | --- |
 | `inspect_harness.py` | Independent implementation as an Inspect task, solver, and scorer |
-| `run_h1.py` | Runs both harnesses over the frozen vector and compares terminal results |
+| `run_h1.py` | Runs both harnesses over the frozen vector and compares case by case |
+| `H1_RESULT.json` | Committed gate evidence |
+| `H1_INDEPENDENCE_RECORD.json` | Committed independence record |
 | `INSPECT_PIN.json` | Exact pin with wheel and source digests |
 | `requirements.txt` | `inspect-ai==0.3.263` |
-
-## Pin
-
-```
-inspect-ai==0.3.263
-```
-
-PyPI release date 2026-09-04. Wheel and source SHA-256 digests are in `INSPECT_PIN.json`.
+| `CHANGELOG.md` | H1 harness changelog, including the v0.1.0 defect |
 
 ## Running
 
 ```bash
 python -m pip install -r reference/inspect_ai/requirements.txt
-python reference/inspect_ai/run_h1.py
+python reference/inspect_ai/run_h1.py --frozen-tree .
 ```
 
-Expected terminal on success: `H1_PASS`, plus an `H1_RESULT.json` in this directory.
+Exactly one input mode is required, and no directory is ever searched implicitly:
 
-### Two things currently block that command
+| Mode | Behavior |
+| --- | --- |
+| `--frozen-tree REPO_ROOT` | Runs the v0.1.2 integrity gate (all 42 manifest entries verified byte-for-byte), then reconstitutes the exact frozen package |
+| `--frozen-zip ZIP` | Verifies the archive SHA-256 against the frozen digest before extraction |
 
-**1. `run_h1.py` requires the frozen ZIP.**
+Both then verify the frozen manifest digest, so they converge on the same frozen
+normative inputs. Neither mode weakens frozen-package verification.
 
-`run_h1.py` expects `ICTS_v0_C18_SYNTHETIC_FIRST_v0.1.2.zip` beside it and verifies its
-SHA-256 against
-`a3f225bd493f297d340688345a686f16cd16df14cf39676621e1d6232b2d070b` before doing anything.
-That archive is **not committed here** — this repository carries the extracted, individually
-hash-verified tree instead. To run H1 as written, place the frozen ZIP in this directory.
+### Terminal states
 
-**2. The harness does not currently load under its own pin.**
+| Terminal | Exit | Meaning |
+| --- | --- | --- |
+| `H1_PASS` | 0 | Every frozen case: `bare == inspect == expected` |
+| `H1_FAIL` | 1 | Any case differs |
+| `H1_NOT_EXECUTED` | 2 | Environment or runtime prevented execution |
 
-`inspect_harness.py` declares its scorer with a bare decorator:
+An execution failure is never converted into a pass. `H1_NOT_EXECUTED` is
+deliberately distinct from `H1_FAIL`: "the gate could not run" and "the gate ran
+and the harnesses disagreed" are different facts.
 
-```python
-@scorer
-def icts_c18_scorer():
-```
+## Evidence
 
-Under the pinned `inspect-ai==0.3.263`, `@scorer` requires a `metrics` argument, so importing
-the task raises:
+`H1_RESULT.json` records every case individually —
+`case_id / expected / bare_python_result / inspect_ai_result / equivalent`. No
+aggregate-only comparison is used anywhere in the gate.
 
-```
-TypeError: scorer.<locals>.wrapper() missing 1 required positional argument: 'scorer_type'
-```
-
-This is a defect in `ICTS_H1_INSPECT_v0.1.0`, not in the frozen v0.1.2 candidate. It is
-recorded here rather than silently patched, because the H1 package is a candidate under
-development and quietly editing a candidate is exactly what
-[`../../review/BLIND_REVIEW_PROTOCOL.md`](../../review/BLIND_REVIEW_PROTOCOL.md) forbids.
-Fixing it is a versioned change to the H1 package through
-[`../../governance/EXTERNAL_CHANGE_PROCESS.md`](../../governance/EXTERNAL_CHANGE_PROCESS.md).
-
-## Why H1 is still not established
-
-A diagnostic run has been performed against the byte-exact frozen v0.1.2 tree with a local
-one-line decorator correction applied **outside** this repository. In that run, all 14 cases
-produced equivalent terminal results across both harnesses.
-
-That is a useful signal about where the work stands. It is **not** the H1 gate, for three
-reasons:
-
-1. the harness was locally modified to run at all;
-2. the run bypassed `run_h1.py`'s ZIP-digest gate;
-3. the corrected harness is not what is committed here.
-
-H1 is established only when the committed, unmodified H1 package executes under its own pin
-and produces equivalent normative terminal results against the frozen vector. Until then this
-directory reads `H1 EXECUTION PENDING`, and no claim of harness independence should be made.
+Its **normative portion** (gate, versions, vector, property, frozen manifest
+digest, comparisons, terminal) contains no timestamps and nothing
+environment-specific, and is digested as `normative_comparison_sha256`. Run
+metadata is kept separate. The file as a whole is **not** byte-reproducible
+across environments and is not claimed to be; the normative portion and its
+digest are, and CI checks the committed evidence against a fresh run.
 
 ## CI
 
-H1 is deliberately **not** part of the core conformance gate. An unavailable or broken
-optional harness must never make the core suite unusable, so
-`.github/workflows/test.yml` runs it as a separate, non-blocking job.
+H1 is a **required-success** job on Python 3.11 and 3.12. It is no longer
+`continue-on-error`.
+
+The bare-Python core keeps its broader 3.9–3.12 matrix. H1 is not forced onto a
+Python version unsupported by the Inspect dependency chain merely to match it.
+
+This matters: in v0.1.0 the H1 job was advisory, so a harness that could not even
+import produced no failing signal, and the defect reached the public repository.

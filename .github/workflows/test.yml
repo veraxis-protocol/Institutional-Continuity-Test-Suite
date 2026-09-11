@@ -2,6 +2,9 @@ name: test
 
 # The core conformance gate must never depend on an optional harness, a network
 # install, or a third-party package. It is bare Python over frozen inputs.
+#
+# The H1 gate is separate and does take a pinned dependency, but it is no longer
+# advisory: as of ICTS_H1_INSPECT_v0.1.1 it is a required-success job.
 
 on:
   push:
@@ -63,30 +66,35 @@ jobs:
           fi
           echo "OK: no bytecode or cache artifacts committed"
 
-  # H1 is under development and is deliberately NON-BLOCKING. An unavailable or
-  # broken optional harness must never make the core conformance suite unusable.
+  # H1 harness-independence gate.
   #
-  # This job reports H1 status. It does NOT establish the H1 gate: that requires
-  # the committed, unmodified H1 package to execute under its own pin and produce
-  # equivalent normative terminal results against the frozen vector.
-  # See reference/inspect_ai/README.md.
-  h1-inspect:
-    name: H1 inspect harness (non-blocking, informational)
+  # Supported H1 matrix: Python 3.11 and 3.12. The bare-Python core keeps its
+  # broader 3.9-3.12 matrix; H1 is not forced onto a Python version unsupported
+  # by the Inspect dependency chain merely to match it.
+  #
+  # This job is a REQUIRED SUCCESS gate. It is deliberately NOT
+  # continue-on-error: ICTS_H1_INSPECT_v0.1.0 failed silently as an advisory
+  # job, which is how the defect survived.
+  h1:
+    name: H1 harness independence (python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
-    continue-on-error: true
     needs: conformance
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install pinned Inspect AI
-        run: python -m pip install -r reference/inspect_ai/requirements.txt
+        run: python -m pip install inspect-ai==0.3.263
 
-      - name: Report pin
+      - name: Verify the pin matches INSPECT_PIN.json
         run: |
           python - <<'PY'
           import importlib.metadata, json, pathlib
@@ -98,12 +106,70 @@ jobs:
               raise SystemExit(f"pin mismatch: expected {pin['version']}, got {installed}")
           PY
 
-      - name: Attempt H1
+      # run_h1.py verifies frozen v0.1.2 integrity, runs the bare-Python
+      # baseline, runs the independent Inspect implementation, and compares all
+      # 14 frozen cases one by one. It exits non-zero on any difference, and
+      # reports H1_NOT_EXECUTED rather than a pass if it cannot run.
+      - name: Run H1 gate
+        run: python reference/inspect_ai/run_h1.py --frozen-tree . --output "$RUNNER_TEMP/H1_RESULT.json" --independence-output "$RUNNER_TEMP/H1_INDEPENDENCE_RECORD.json"
+
+      - name: Assert H1 terminal, independence, and full case coverage
         run: |
-          echo "H1 EXECUTION PENDING - see reference/inspect_ai/README.md"
-          echo "Known blockers: run_h1.py requires the frozen v0.1.2 ZIP beside it,"
-          echo "and inspect_harness.py does not load under its own pin."
-          python reference/inspect_ai/run_h1.py || {
-            echo "::warning::H1 did not complete. H1 remains NOT ESTABLISHED."
-            exit 1
-          }
+          python - <<'PY'
+          import json, os, pathlib
+          result = json.loads(pathlib.Path(os.environ["RUNNER_TEMP"], "H1_RESULT.json").read_text())
+
+          assert result["terminal"] == "H1_PASS", f"terminal was {result['terminal']}"
+          assert result["cases_total"] == 14, f"expected 14 cases, got {result['cases_total']}"
+          assert result["cases_equivalent"] == 14, (
+              f"only {result['cases_equivalent']}/{result['cases_total']} equivalent"
+          )
+
+          # Case-by-case, never aggregate-only.
+          for c in result["comparisons"]:
+              assert c["equivalent"], (
+                  f"{c['case_id']}: expected={c['expected']} "
+                  f"bare={c['bare_python_result']} inspect={c['inspect_ai_result']}"
+              )
+
+          ind = result["independence_check"]
+          assert ind["independent"], "Inspect harness is not independent"
+          assert ind["inspect_imports_bare_python"] is False
+          assert ind["independent_normalization"]
+          assert ind["independent_evidence_sufficiency"]
+          assert ind["independent_invariant_adjudication"]
+
+          assert result["normative_manifest_sha256"] == (
+              "920d390714cc9593cf0a79c1caf80f2566419e2fa05d6e12cb9c403b20f0040f"
+          )
+          print("OK: H1_PASS, 14/14 equivalent, independence confirmed")
+          print(f"    normative_comparison_sha256 {result['normative_comparison_sha256']}")
+          PY
+
+      # The committed evidence must reflect what the gate actually produces.
+      # The normative portion carries no timestamps or environment data, so it
+      # is stable across machines and is compared digest-to-digest.
+      - name: Assert committed evidence matches this run
+        run: |
+          python - <<'PY'
+          import json, os, pathlib
+          fresh = json.loads(pathlib.Path(os.environ["RUNNER_TEMP"], "H1_RESULT.json").read_text())
+          committed = json.loads(pathlib.Path("reference/inspect_ai/H1_RESULT.json").read_text())
+          if fresh["normative_comparison_sha256"] != committed["normative_comparison_sha256"]:
+              raise SystemExit(
+                  "committed H1 evidence is stale:\n"
+                  f"  committed {committed['normative_comparison_sha256']}\n"
+                  f"  observed  {fresh['normative_comparison_sha256']}"
+              )
+          print("OK: committed H1 evidence matches this run")
+          PY
+
+      - name: Upload H1 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: h1-evidence-py${{ matrix.python-version }}
+          path: |
+            ${{ runner.temp }}/H1_RESULT.json
+            ${{ runner.temp }}/H1_INDEPENDENCE_RECORD.json
+          if-no-files-found: warn

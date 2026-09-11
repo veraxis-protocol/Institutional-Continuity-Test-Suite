@@ -32,6 +32,10 @@ That makes this script simultaneously:
   2. proof that this repository still carries a runnable, manifest-clean
      copy of frozen v0.1.2.
 
+The helpers below (verify_frozen_files, materialize_frozen_package) are also
+imported by reference/inspect_ai/run_h1.py so that the H1 gate runs against the
+same verified frozen inputs, through one implementation rather than two.
+
 Exit codes
 ----------
 0  all frozen hashes matched and the frozen suite returned terminal PASS
@@ -57,52 +61,112 @@ EXPECTED_MANIFEST_SHA256 = (
     "920d390714cc9593cf0a79c1caf80f2566419e2fa05d6e12cb9c403b20f0040f"
 )
 
+FROZEN_PACKAGE_DIRNAME = "icts_v0_c18_synthetic_first_v0.1.2"
+
+
+class FrozenPackageError(RuntimeError):
+    """Raised when the repository's frozen v0.1.2 inputs do not verify."""
+
 
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def sha256_file(path: Path) -> str:
+    return sha256_bytes(path.read_bytes())
 
 
 def repo_path_for(manifest_rel: str) -> Path:
     return REPO / DISPLACED.get(manifest_rel, manifest_rel)
 
 
-def main() -> int:
+def verify_frozen_files():
+    """Verify the frozen manifest and every file it lists.
+
+    Returns (manifest, manifest_sha256, problems). `problems` is empty when the
+    repository's frozen inputs are intact.
+    """
+    problems = []
+
     manifest_file = REPO / "MANIFEST.json"
     if not manifest_file.exists():
-        print("FAIL: MANIFEST.json is missing from the repository root")
-        return 1
+        return None, None, ["MANIFEST.json is missing from the repository root"]
 
-    manifest_sha = sha256_bytes(manifest_file.read_bytes())
+    manifest_sha = sha256_file(manifest_file)
     if manifest_sha != EXPECTED_MANIFEST_SHA256:
-        print("FAIL: frozen MANIFEST.json digest mismatch")
-        print(f"  expected {EXPECTED_MANIFEST_SHA256}")
-        print(f"  observed {manifest_sha}")
-        return 1
+        problems.append(
+            "frozen MANIFEST.json digest mismatch\n"
+            f"    expected {EXPECTED_MANIFEST_SHA256}\n"
+            f"    observed {manifest_sha}"
+        )
 
-    # The provenance copy must stay identical to the root manifest.
     provenance_manifest = REPO / "provenance" / "v0.1.2-manifest.json"
     if not provenance_manifest.exists():
-        print("FAIL: provenance/v0.1.2-manifest.json is missing")
-        return 1
-    if sha256_bytes(provenance_manifest.read_bytes()) != manifest_sha:
-        print("FAIL: provenance/v0.1.2-manifest.json has drifted from MANIFEST.json")
-        return 1
+        problems.append("provenance/v0.1.2-manifest.json is missing")
+    elif sha256_file(provenance_manifest) != manifest_sha:
+        problems.append(
+            "provenance/v0.1.2-manifest.json has drifted from MANIFEST.json"
+        )
 
     manifest = json.loads(manifest_file.read_text())
-    files = manifest["files"]
-
-    problems = []
-    for rel, meta in sorted(files.items()):
+    for rel, meta in sorted(manifest["files"].items()):
         target = repo_path_for(rel)
         if not target.exists():
-            problems.append(f"missing: {rel} (expected at {target.relative_to(REPO)})")
+            problems.append(
+                f"missing: {rel} (expected at {target.relative_to(REPO)})"
+            )
             continue
-        observed = sha256_bytes(target.read_bytes())
+        observed = sha256_file(target)
         if observed != meta["sha256"]:
             problems.append(
-                f"altered: {rel}\n    expected {meta['sha256']}\n    observed {observed}"
+                f"altered: {rel}\n"
+                f"    expected {meta['sha256']}\n"
+                f"    observed {observed}"
             )
 
+    return manifest, manifest_sha, problems
+
+
+def materialize_frozen_package(dest_parent: Path) -> Path:
+    """Reconstitute the exact frozen v0.1.2 package under `dest_parent`.
+
+    Verifies every frozen file first and raises FrozenPackageError if anything
+    is missing or altered. Restores the displaced README.md to its frozen bytes
+    so the resulting tree is manifest-clean to the unmodified run_suite.py.
+
+    Returns the package root.
+    """
+    manifest, _manifest_sha, problems = verify_frozen_files()
+    if problems:
+        raise FrozenPackageError(
+            "frozen inputs did not verify:\n  " + "\n  ".join(problems)
+        )
+
+    vroot = Path(dest_parent) / FROZEN_PACKAGE_DIRNAME
+    vroot.mkdir(parents=True, exist_ok=True)
+
+    shutil.copy2(REPO / "MANIFEST.json", vroot / "MANIFEST.json")
+    for rel in manifest["files"]:
+        dest = vroot / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(repo_path_for(rel), dest)
+
+    return vroot
+
+
+def run_frozen_suite(vroot: Path):
+    """Run the UNMODIFIED frozen run_suite.py inside a materialized package."""
+    proc = subprocess.run(
+        [sys.executable, "reference/bare_python/run_suite.py"],
+        cwd=vroot,
+        text=True,
+        capture_output=True,
+    )
+    return proc
+
+
+def main() -> int:
+    manifest, manifest_sha, problems = verify_frozen_files()
     if problems:
         print(f"FAIL: {len(problems)} frozen file problem(s) found")
         for p in problems:
@@ -110,33 +174,22 @@ def main() -> int:
         return 1
 
     print(f"OK: frozen MANIFEST.json digest {manifest_sha}")
-    print(f"OK: all {len(files)} frozen manifest entries verified byte-for-byte")
+    print(
+        f"OK: all {len(manifest['files'])} frozen manifest entries "
+        "verified byte-for-byte"
+    )
     for rel, mapped in DISPLACED.items():
         print(f"    (documented port deviation: {rel} carried at {mapped})")
 
     # Reconstitute the exact frozen package and run the unmodified suite in it.
     with tempfile.TemporaryDirectory(prefix="icts_frozen_") as td:
-        vroot = Path(td) / "icts_v0_c18_synthetic_first_v0.1.2"
-        vroot.mkdir(parents=True)
-
-        shutil.copy2(manifest_file, vroot / "MANIFEST.json")
-        for rel in files:
-            dest = vroot / rel
-            dest.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(repo_path_for(rel), dest)
-
-        proc = subprocess.run(
-            [sys.executable, "reference/bare_python/run_suite.py"],
-            cwd=vroot,
-            text=True,
-            capture_output=True,
-        )
+        vroot = materialize_frozen_package(Path(td))
+        proc = run_frozen_suite(vroot)
         if proc.returncode != 0:
             print("FAIL: frozen suite did not exit 0 inside the reconstituted package")
             print(proc.stdout[-4000:])
             print(proc.stderr[-4000:])
             return 1
-
         bundle = json.loads(proc.stdout)
 
     if bundle.get("terminal") != "PASS":

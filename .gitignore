@@ -9,8 +9,11 @@ __pycache__/
 # run_suite.py writes evidence/run_result.json on every execution. Run output is
 # environment-bound and must never be committed as if it were a frozen input.
 /evidence/
-H1_RESULT.json
 inspect_logs/
+
+# NOTE: reference/inspect_ai/H1_RESULT.json and H1_INDEPENDENCE_RECORD.json are
+# deliberately NOT ignored. They are the committed H1 gate evidence that the
+# public claim links to.
 
 # Environments
 .venv/

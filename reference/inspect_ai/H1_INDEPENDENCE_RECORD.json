@@ -1,0 +1,36 @@
+{
+  "h1_version": "0.1.1",
+  "independent": true,
+  "independent_evidence_sufficiency": true,
+  "independent_invariant_adjudication": true,
+  "independent_normalization": true,
+  "inspect_imports_bare_python": false,
+  "method": {
+    "bare_python_modules_loaded_after_import": [],
+    "bare_python_textual_references": [],
+    "function_module_ownership": {
+      "adjudicate": true,
+      "evidence_sufficient": true,
+      "invariant_holds": true,
+      "normalize": true
+    },
+    "missing_normative_functions": [],
+    "required_normative_functions_defined_locally": [
+      "adjudicate",
+      "evidence_sufficient",
+      "invariant_holds",
+      "normalize"
+    ],
+    "static_imports_observed": [
+      "__future__",
+      "inspect_ai",
+      "inspect_ai.dataset",
+      "inspect_ai.scorer",
+      "inspect_ai.solver",
+      "json",
+      "typing"
+    ]
+  },
+  "note": "Both harnesses consume the same frozen normative inputs (property, ESC, NPC, topology declarations, fixtures, case set). They implement the normative evaluation path independently. run_h1.py executes the bare-Python suite as a separate subprocess to obtain the comparison baseline; the Inspect harness itself never imports or invokes it.",
+  "shared_normative_inputs_only": true
+}
