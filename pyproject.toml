@@ -1,0 +1,38 @@
+# Project metadata for the Institutional Continuity Test Suite.
+#
+# NOTE: The ICTS reference implementation is deliberately dependency-free bare
+# Python and is executed by path, not by installation:
+#
+#     python scripts/verify_frozen_package.py
+#     python reference/bare_python/run_adversarial_regression.py
+#
+# This file carries metadata and tool configuration. Installing the project is
+# not required, and no part of the frozen v0.1.2 package depends on it.
+
+[project]
+name = "institutional-continuity-test-suite"
+version = "0.1.2"
+description = "Executable conformance suite testing whether institutional properties survived execution across an assembled AI deployment."
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = ["conformance", "ai-assurance", "institutional-controls", "evidence", "agentic-systems"]
+
+# LICENSE NOT YET DESIGNATED. See LICENSE-PENDING.md.
+# No license or license-file key is set, deliberately. Do not add one without an
+# explicit licensing decision.
+
+# The core suite has no runtime dependencies, by design.
+dependencies = []
+
+[project.optional-dependencies]
+# Second harness (H1) only. Never required for the core conformance suite.
+# Pinned exactly for H1 reproducibility; see reference/inspect_ai/INSPECT_PIN.json.
+h1 = ["inspect-ai==0.3.263"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+# Frozen v0.1.2 sources are carried byte-for-byte and are not reformatted.
+exclude = ["reference/bare_python/*", "reference/inspect_ai/*"]

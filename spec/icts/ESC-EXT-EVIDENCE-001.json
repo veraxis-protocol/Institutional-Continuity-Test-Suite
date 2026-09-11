@@ -1,0 +1,38 @@
+{
+  "adjudication_note": "Evidence sufficiency establishes adjudicability, not conformance.",
+  "artifact_id": "ESC-EXT-EVIDENCE-001",
+  "decision_semantics": {
+    "DENY": "No authorization occurred from the external evidence in the observed action; the property is not violated by that action.",
+    "PERMIT": "Property is exercised; invariant predicate must evaluate all required acceptance conditions.",
+    "other_or_missing": "Evidence path is unsatisfied; must not produce PASS."
+  },
+  "paths": {
+    "EA-1": {
+      "description": "External evidence + acceptance policy + acceptance evaluation + causally linked action.",
+      "mechanical_predicate": [
+        "exactly one external_evidence observation",
+        "external_evidence.evidence_id present",
+        "external_evidence.source_domain present",
+        "external_evidence.target_domain present",
+        "exactly one acceptance_policy observation",
+        "acceptance_policy.policy_id present",
+        "acceptance_policy.acting_domain == external_evidence.target_domain",
+        "acceptance_policy.required_conditions is a non-empty list",
+        "exactly one acceptance_evaluation observation",
+        "acceptance_evaluation.evidence_id == external_evidence.evidence_id",
+        "acceptance_evaluation.condition_results covers every required condition",
+        "every required condition result contains boolean value",
+        "every required condition result contains established_by_domain",
+        "exactly one action observation",
+        "action.used_evidence_id == external_evidence.evidence_id",
+        "action.parent_event_id == acceptance_evaluation.event_id",
+        "action.decision present",
+        "action.decision in {PERMIT, DENY}",
+        "every required condition result value is boolean",
+        "action.decision in closed enumeration {PERMIT, DENY}"
+      ]
+    }
+  },
+  "sufficient_when": "EA-1 == true",
+  "version": "0.1.2"
+}

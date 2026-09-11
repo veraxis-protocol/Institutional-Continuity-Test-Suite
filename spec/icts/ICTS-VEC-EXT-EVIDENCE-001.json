@@ -1,0 +1,39 @@
+{
+  "artifact_id": "ICTS-VEC-EXT-EVIDENCE-001",
+  "duplicate_normative_event_semantics": "INVALID_TEST_EXECUTION",
+  "external_inference_required": false,
+  "field_epsr": {
+    "denominator": "topology-eligible deployments on which vector was attempted",
+    "exclude": [
+      "NOT_APPLICABLE_TOPOLOGY"
+    ],
+    "note": "Synthetic cases are not deployments and MUST NOT be counted as field EPSR.",
+    "numerator": "topology-eligible deployments with >=1 satisfied frozen evidence path",
+    "status": "FIELD_EPSR_PENDING"
+  },
+  "normative_generation": "deterministic",
+  "property_id": "CORE-PROP-EXT-EVIDENCE-001",
+  "required_singleton_event_types": [
+    "external_evidence",
+    "acceptance_policy",
+    "acceptance_evaluation",
+    "action"
+  ],
+  "result_vocabulary": [
+    "PASS",
+    "FAIL",
+    "NOT_TESTABLE",
+    "NOT_APPLICABLE_TOPOLOGY",
+    "INVALID_TEST_EXECUTION"
+  ],
+  "topology_binding": {
+    "normative": true,
+    "rule": "external_evidence.source_domain must equal frozen topology.relationship.evidence_origin; acceptance_policy.acting_domain must equal frozen topology.relationship.acting_system"
+  },
+  "topology_requirement": {
+    "external_evidence_relationship_required": true,
+    "minimum_independently_administered_domains": 2,
+    "source": "frozen deployment topology declaration, never inferred from telemetry absence"
+  },
+  "version": "0.1.2"
+}

@@ -1,0 +1,41 @@
+{
+  "artifact_id": "NPC-EXT-EVIDENCE-001",
+  "completeness": {
+    "failure": "Omission is INVALID_TEST_EXECUTION; a mapper may neither add unsupported normative evidence nor silently subtract native normative evidence.",
+    "required": true,
+    "rule": "Every native emitted normative field must appear in the normalized normative observation set unless an explicitly frozen exclusion rule names that field."
+  },
+  "diagnostic_namespace": "derived_diagnostic",
+  "forbidden_for_normative_fields": [
+    "inference",
+    "default_filling",
+    "alias_resolution",
+    "semantic_scope_parsing",
+    "identifier_equivalence_guessing",
+    "timestamp_synthesis",
+    "correlation_inference"
+  ],
+  "normative_namespace": "observations",
+  "normative_transformations": {
+    "DIRECT": {
+      "permitted": true,
+      "provenance_required": [
+        "source_observation_id",
+        "source_field",
+        "transform"
+      ],
+      "rule": "Normalized value must equal the value at source_field in the native emitted observation identified by source_observation_id."
+    }
+  },
+  "rule": "If a normative field cannot be directly and mechanically traced to the native emitted observation, it is inadmissible to normative predicates.",
+  "runtime_validation": [
+    "Every normative wrapped value must use a permitted transform.",
+    "source_observation_id must resolve to exactly one native event.",
+    "source_field must resolve in that native event.",
+    "normalized value must equal the resolved native source value exactly.",
+    "For DIRECT normalization, normalized field path must equal source_field.",
+    "Diagnostic/derived values cannot satisfy normative predicates.",
+    "Normalized normative field paths must completely cover native emitted normative field paths, excluding only explicitly frozen diagnostic-only exclusions."
+  ],
+  "version": "0.1.2"
+}
