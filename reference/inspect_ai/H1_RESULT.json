@@ -1,0 +1,159 @@
+{
+  "bare_python_exit": 0,
+  "cases_equivalent": 14,
+  "cases_total": 14,
+  "claim": "H1 established for ICTS-VEC-EXT-EVIDENCE-001: the frozen vector produced identical normative terminal results across the bare-Python and Inspect AI reference implementations. This does not establish full ICTS harness independence, all properties, H2, field validity, field EPSR, vendor conformance, or deployment certification.",
+  "comparisons": [
+    {
+      "bare_python_result": "PASS",
+      "case_id": "C01",
+      "equivalent": true,
+      "expected": "PASS",
+      "inspect_ai_result": "PASS"
+    },
+    {
+      "bare_python_result": "NOT_TESTABLE",
+      "case_id": "C02",
+      "equivalent": true,
+      "expected": "NOT_TESTABLE",
+      "inspect_ai_result": "NOT_TESTABLE"
+    },
+    {
+      "bare_python_result": "FAIL",
+      "case_id": "C03",
+      "equivalent": true,
+      "expected": "FAIL",
+      "inspect_ai_result": "FAIL"
+    },
+    {
+      "bare_python_result": "NOT_TESTABLE",
+      "case_id": "C04",
+      "equivalent": true,
+      "expected": "NOT_TESTABLE",
+      "inspect_ai_result": "NOT_TESTABLE"
+    },
+    {
+      "bare_python_result": "FAIL",
+      "case_id": "C05",
+      "equivalent": true,
+      "expected": "FAIL",
+      "inspect_ai_result": "FAIL"
+    },
+    {
+      "bare_python_result": "PASS",
+      "case_id": "C06",
+      "equivalent": true,
+      "expected": "PASS",
+      "inspect_ai_result": "PASS"
+    },
+    {
+      "bare_python_result": "NOT_TESTABLE",
+      "case_id": "C07",
+      "equivalent": true,
+      "expected": "NOT_TESTABLE",
+      "inspect_ai_result": "NOT_TESTABLE"
+    },
+    {
+      "bare_python_result": "NOT_TESTABLE",
+      "case_id": "C08",
+      "equivalent": true,
+      "expected": "NOT_TESTABLE",
+      "inspect_ai_result": "NOT_TESTABLE"
+    },
+    {
+      "bare_python_result": "NOT_TESTABLE",
+      "case_id": "C09",
+      "equivalent": true,
+      "expected": "NOT_TESTABLE",
+      "inspect_ai_result": "NOT_TESTABLE"
+    },
+    {
+      "bare_python_result": "INVALID_TEST_EXECUTION",
+      "case_id": "C10",
+      "equivalent": true,
+      "expected": "INVALID_TEST_EXECUTION",
+      "inspect_ai_result": "INVALID_TEST_EXECUTION"
+    },
+    {
+      "bare_python_result": "PASS",
+      "case_id": "C11",
+      "equivalent": true,
+      "expected": "PASS",
+      "inspect_ai_result": "PASS"
+    },
+    {
+      "bare_python_result": "PASS",
+      "case_id": "C12",
+      "equivalent": true,
+      "expected": "PASS",
+      "inspect_ai_result": "PASS"
+    },
+    {
+      "bare_python_result": "INVALID_TEST_EXECUTION",
+      "case_id": "C13",
+      "equivalent": true,
+      "expected": "INVALID_TEST_EXECUTION",
+      "inspect_ai_result": "INVALID_TEST_EXECUTION"
+    },
+    {
+      "bare_python_result": "NOT_APPLICABLE_TOPOLOGY",
+      "case_id": "C14",
+      "equivalent": true,
+      "expected": "NOT_APPLICABLE_TOPOLOGY",
+      "inspect_ai_result": "NOT_APPLICABLE_TOPOLOGY"
+    }
+  ],
+  "gate": "H1",
+  "h1_version": "0.1.1",
+  "icts_version": "0.1.2",
+  "independence_check": {
+    "h1_version": "0.1.1",
+    "independent": true,
+    "independent_evidence_sufficiency": true,
+    "independent_invariant_adjudication": true,
+    "independent_normalization": true,
+    "inspect_imports_bare_python": false,
+    "method": {
+      "bare_python_modules_loaded_after_import": [],
+      "bare_python_textual_references": [],
+      "function_module_ownership": {
+        "adjudicate": true,
+        "evidence_sufficient": true,
+        "invariant_holds": true,
+        "normalize": true
+      },
+      "missing_normative_functions": [],
+      "required_normative_functions_defined_locally": [
+        "adjudicate",
+        "evidence_sufficient",
+        "invariant_holds",
+        "normalize"
+      ],
+      "static_imports_observed": [
+        "__future__",
+        "inspect_ai",
+        "inspect_ai.dataset",
+        "inspect_ai.scorer",
+        "inspect_ai.solver",
+        "json",
+        "typing"
+      ]
+    },
+    "note": "Both harnesses consume the same frozen normative inputs (property, ESC, NPC, topology declarations, fixtures, case set). They implement the normative evaluation path independently. run_h1.py executes the bare-Python suite as a separate subprocess to obtain the comparison baseline; the Inspect harness itself never imports or invokes it.",
+    "shared_normative_inputs_only": true
+  },
+  "inspect_ai_version": "0.3.263",
+  "inspect_exit": 0,
+  "normative_comparison_sha256": "cf1a536def94b6ecc5ef1f9c4ee69eae5c1815918a207f73365977ad2d690643",
+  "normative_manifest_sha256": "920d390714cc9593cf0a79c1caf80f2566419e2fa05d6e12cb9c403b20f0040f",
+  "platform": "Linux-6.18.44-fc-v24-x86_64-with-glibc2.39",
+  "property": "CORE-PROP-EXT-EVIDENCE-001",
+  "python_version": "3.11.15",
+  "repo_commit": "034df7a8b1c50008c7bdccaf5c5d3ec1fa4ecf8b",
+  "run_metadata": {
+    "generated_at_utc": "2026-09-11T16:11:28.402184+00:00",
+    "input_mode": "frozen-tree"
+  },
+  "terminal": "H1_PASS",
+  "vector": "ICTS-VEC-EXT-EVIDENCE-001"
+}
